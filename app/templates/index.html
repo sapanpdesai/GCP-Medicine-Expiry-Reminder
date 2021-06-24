@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Medicine Expiry Reminder</title>
+    <link type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
+    <link type="text/css" href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+</head>
+<body>
+<div id="tf-home">
+    <div class="overlay">
+        <div id="sticky-anchor"></div>
+        <nav class="navbar navbar-default" id="tf-menu">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button class="navbar-toggle collapsed" data-target="#bs-example-navbar-collapse-1"
+                            data-toggle="collapse"
+                            type="button">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar">Hi</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand logo" href="/">Medicine Expiry Reminder</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="#tf-home">Home</a></li>
+                        <li><a href="#tf-about">About</a></li>
+                        <li><a href="#tf-contact">Sign In</a></li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+
+        <div class="container">
+            <div class="content">
+                <h1>Medicine Expiry Reminder</h1>
+                <h3>Keep Track of your Medicine and your Health</h3>
+                <br>
+                <a class="btn btn-primary my-btn" href="#tf-contact">Log in</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="tf-about">
+    <div class="overlay">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-6">
+                    <h3>About Us</h3>
+                    <br>
+                    <p> Provide best customer service to our user. Our main goal is to help our user to keep track of
+                        their medicine and their dosage. Our main priority is our users health.</p>
+                    <p></p>
+                    <br>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="tf-contact">
+    <div class="container">
+        <div class="section-title">
+            <h3>Sign in with google</h3>
+            <p></p>
+            <hr>
+        </div>
+
+        <div class="space"></div>
+
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <form id="contact">
+                    <div>
+                        <button class="btn btn-primary my-btn dark" type="submit"><a href='/signin'>Sign in</a></button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<nav id="tf-footer">
+    <div class="container">
+        <div class="pull-left">
+            <p>2021 Medicine Expiry Reminder, Designed and Coded by <a href="https://dribbble.com/jennpereira">Akash
+                Patel, Sapan Desai </a> & <a href="https://themeforces.com"> Disha Bhukte</a></p>
+        </div>
+    </div>
+</nav>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="{{url_for('static', filename='js/main.js')}}"></script>
+
+</body>
+</html>

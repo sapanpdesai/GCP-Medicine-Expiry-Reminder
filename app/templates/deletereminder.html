@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QR Code Scanner</title>
+    <meta charset="UTF-8"/>
+    <link href="{{url_for('static', filename='css/styles.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{url_for('static', filename='css/style.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
+    <script src="https://rawgit.com/sitepoint-editors/jsqrcode/master/src/qr_packed.js"></script>
+</head>
+
+<body>
+<div id="tf-home">
+    <div class="overlay">
+        <div id="sticky-anchor"></div>
+        <nav class="navbar navbar-default" id="tf-menu">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button class="navbar-toggle collapsed" data-target="#bs-example-navbar-collapse-1"
+                            data-toggle="collapse"
+                            type="button">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar">Hi</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand logo" href="/qrcodescanner">Medicine Expiry Reminder</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/qrcodescanner">Home</a></li>
+                        <li><a href="/deletereminder">Delete Reminder</a></li>
+                        <li><a href="/medicinefeedback">Medicine Feedback</a></li>
+                        <li><a href="/medicinereviews">Medicine Review</a></li>
+                        <li><a href="/signout">Sign out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+<div>
+    <div class="container">
+        <div class="content">
+            <h3>Delete Reminder</h3>
+
+            <div class="row">
+
+                <div class="col-md-5 col-md-offset-1">
+                    <h4>Please select medicine from list to delete reminder</h4>
+                    <form id="contact" method="POST" name="deletereminderform" onsubmit="return false">
+
+                        <h4 align="left">Medicine Name </h4><select class="form-control" id="MedicineName"
+                                                                    name="MedicineName"
+                                                                    onchange="myFunction()"></select>
+
+                        <h4 align="left">Pharmaceutical Company </h4><input autofocus class="form-control"
+                                                                            disabled
+                                                                            id="PharmaceuticalCompany"
+                                                                            name="PharmaceuticalCompany" required
+                                                                            type="text">
+
+                        <h4 align="left">Doctor's Name </h4><input class="form-control" disabled
+                                                                   id="DoctorName" name="DoctorName"
+                                                                   required type="email">
+
+                        <h4 align="left">Doctor's Email Id </h4><input class="form-control" disabled
+                                                                       id="EmailId" name="EmailId"
+                                                                       required type="email">
+
+                        <h4 align="left">Expiry Date</h4><input class="form-control" disabled
+                                                                id="ExpiryDate" name="ExpiryDate"
+                                                                required type="email">
+
+                        <div>
+                            <button class="btn btn-primary my-btn dark" id="deleteReminder" type="submit">Submit
+                            </button>
+                            <button class="btn btn-primary my-btn dark" type="reset">Reset</button>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="col-md-5 col-md-offset-1">
+                    <h4>Delete all reminder from my calendar</h4>
+                    <form id="contact1">
+                        <div>
+                            <button class="btn btn-primary my-btn dark" id="deleteAllReminder" type="submit">Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <nav id="tf-footer">
+        <div class="container">
+            <div class="pull-left">
+                <p>2021 Medicine Expiry Reminder, Designed and Coded by <a href="#">Akash
+                    Patel, Sapan Desai </a> & <a href="#"> Disha Bhukte</a></p>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="{{url_for('static', filename='js/main.js')}}" type="text/javascript"></script>
+</body>
+
+<script>
+    let PharmaceuticalCompany = document.getElementById("PharmaceuticalCompany");
+    let DoctorName = document.getElementById("DoctorName");
+    let ExpiryDate = document.getElementById("ExpiryDate");
+    let EmailId = document.getElementById("EmailId");
+    $(document).ready(function(){
+			var apiurl = 'https://medicine-expiry-rmdr.uc.r.appspot.com/getUserMedicineHistory';
+			var select = document.getElementById("MedicineName");
+			$.ajax({
+				url: apiurl,
+         		headers: {  'Access-Control-Allow-Origin': '*' },
+         		method: 'GET',
+         		dataType: 'json',
+         		contentType: "application/json",
+         		success: function(response){
+                    var len = Object.keys(response).length;
+                    for(var i=1; i<len+1; i++){
+                        var opt = response[i].medicineName;
+                        var el = document.createElement("option");
+                        console.log(response[i]);
+                        el.textContent = opt;
+                        el.value = opt;
+                        select.appendChild(el);
+                    }
+                    if(len > 0){
+                        PharmaceuticalCompany.value = response[1].pharmaceuticalCompany;
+                        EmailId.value = response[1].doctorMailId;
+                        ExpiryDate.value = response[1].expiryDate;
+                        DoctorName.value = response[1].doctorName;
+                    }
+          		},
+          		error:function(response){
+          			alert(JSON.stringify(response['responseJSON']));
+          		}
+			});
+		});
+
+	function myFunction() {
+        var selectedValue = document.getElementById("MedicineName").value;
+        var apiurl = 'https://medicine-expiry-rmdr.uc.r.appspot.com/getUserMedicineHistory';
+        $.ajax({
+				url: apiurl,
+         		headers: {  'Access-Control-Allow-Origin': '*' },
+         		method: 'GET',
+         		dataType: 'json',
+         		contentType: "application/json",
+         		success: function(response){
+                    var len = Object.keys(response).length;
+                    for(var i=1; i<len+1; i++){
+                        var opt = response[i].medicineName;
+
+                        if(opt == selectedValue){
+                            PharmaceuticalCompany.value = response[i].pharmaceuticalCompany;
+                            EmailId.value = response[i].doctorMailId;
+                            ExpiryDate.value = response[i].expiryDate;
+                            DoctorName.value = response[i].doctorName;
+                            break;
+                        }
+                    }
+          		},
+          		error:function(response){
+          			alert(JSON.stringify(response['responseJSON']));
+          		}
+			});
+    }
+
+    $(document).ready(function() {
+      $("#deleteReminder").on("click", function() {
+        var MedicineName = document.getElementById("MedicineName").value;
+        var PharmaceuticalCompany = $("#PharmaceuticalCompany").val();
+        var EmailId = $("#EmailId").val();
+        var DoctorName = $("#DoctorName").val();
+        var ExpiryDate = $("#ExpiryDate").val();
+        var apiurl = 'https://medicine-expiry-rmdr.uc.r.appspot.com/deletereminderfromcalendar';
+        $.ajax({
+          url: apiurl,
+          headers: { 'Access-Control-Allow-Origin': '*' },
+          method:'POST',
+          contentType: "application/json",
+          dataType: 'json',
+          data: JSON.stringify({
+                'MedicineName': MedicineName,
+                'PharmaceuticalCompany': PharmaceuticalCompany,
+                'EmailId': EmailId,
+                'DoctorName': DoctorName,
+                'ExpiryDate': ExpiryDate}),
+
+          success:function(response){
+              $('#contact').reset;
+              alert("Medicine Reminder has been successfully remove from your Google Calendar.")
+              window.location.replace("/deletereminder");
+          },
+          error:function(response){
+            alert("Sorry Some error occurred , we will get back to you.");
+          }
+        });
+      });
+    });
+
+    $(document).ready(function() {
+      $("#deleteAllReminder").on("click", function() {
+        var apiurl = 'https://medicine-expiry-rmdr.uc.r.appspot.com/deleteallreminderfromcalendar';
+        $.ajax({
+          url: apiurl,
+          headers: { 'Access-Control-Allow-Origin': '*' },
+          method:'POST',
+          contentType: "application/json",
+          dataType: 'json',
+
+          success:function(response){
+              console.log(response);
+              $('#contact1').reset;
+              alert("Medicine Reminder has been successfully remove from your Google Calendar.");
+              window.location.replace("/deletereminder");
+          },
+          error:function(response){
+            alert("Sorry Some error occurred , we will get back to you.");
+          }
+        });
+      });
+    });
+
+</script>
+
+</html>

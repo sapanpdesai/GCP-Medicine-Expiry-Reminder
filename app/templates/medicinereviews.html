@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>QR Code Scanner</title>
+    <meta charset="UTF-8"/>
+    <link href="{{url_for('static', filename='css/styles.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{url_for('static', filename='css/style.css')}}" rel="stylesheet" type="text/css"/>
+    <link href="{{url_for('static', filename='css/bootstrap.css') }}" rel="stylesheet">
+    <script src="https://rawgit.com/sitepoint-editors/jsqrcode/master/src/qr_packed.js"></script>
+</head>
+
+<body>
+<div id="tf-home">
+    <div class="overlay">
+        <div id="sticky-anchor"></div>
+        <nav class="navbar navbar-default" id="tf-menu">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button class="navbar-toggle collapsed" data-target="#bs-example-navbar-collapse-1"
+                            data-toggle="collapse"
+                            type="button">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand logo" href="/qrcodescanner">Medicine Expiry Reminder</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li><a href="/qrcodescanner">Home</a></li>
+                        <li><a href="/deletereminder">Delete Reminder</a></li>
+                        <li><a href="/medicinefeedback">Medicine Feedback</a></li>
+                        <li><a href="/medicinereviews">Medicine Review</a></li>
+                        <li><a href="/signout">Sign out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+</div>
+<div>
+    <div class="container">
+        <div class="content">
+            <h3>Feedback of medicine from other users</h3>
+
+
+            <div class="container">
+                <div class="row">
+                    <div class="col md-12">
+                        <br> <br>
+                        <table class="table table-bordered text-center align-middle valign-center table-bordered">
+                            <thead id="table-head-color">
+                            <tr>
+                                <th>Name</th>
+                                <th>Medicine Name</th>
+                                <th>Pharmaceutical Company</th>
+                                <th>Date</th>
+                                <th>Feedback</th>
+                            </tr>
+                            </thead>
+                            <tbody id="testBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <nav id="tf-footer">
+        <div class="container">
+            <div class="pull-left">
+                <p>2021 Medicine Expiry Reminder, Designed and Coded by <a href="#">Akash
+                    Patel, Sapan Desai </a> & <a href="#"> Disha Bhukte</a></p>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="{{url_for('static', filename='js/main.js')}}" type="text/javascript"></script>
+
+<script>
+
+        function loadTableData(item) {
+            console.log(item);
+            const table = document.getElementById("testBody");
+
+                let row = table.insertRow();
+
+                let fullname = row.insertCell(0);
+                fullname.innerHTML = item.fullname;
+
+          		let medicineName = row.insertCell(1);
+          		medicineName.innerHTML = item.medicineName;
+
+          		let pharmaceuticalCompany = row.insertCell(2);
+          		pharmaceuticalCompany.innerHTML = item.pharmaceuticalCompany;
+
+          		let date = row.insertCell(3);
+          		date.innerHTML = item.date;
+
+          		let feedback = row.insertCell(4);
+          		feedback.innerHTML = item.feedback;
+
+        }
+
+		$(document).ready(function(){
+			var apiurl = 'https://medicine-expiry-rmdr.uc.r.appspot.com/getmedicinefeedback';
+			$.ajax({
+				url: apiurl,
+         		headers: {  'Access-Control-Allow-Origin': '*' },
+         		method: 'GET',
+         		dataType: 'json',
+         		contentType: "application/json",
+         		success: function(response){
+                    var len = Object.keys(response).length;
+                    for(var i=1; i<len+1; i++){
+                        loadTableData(response[i]);
+                    }
+          		},
+          		error:function(response){
+          			alert(JSON.stringify(response['responseJSON']));
+          		}
+			});
+		});
+
+
+
+</script>
+</body>
+
+</html>
